@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32-P4 Smart HMI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand-mini"><span class="chip">ESP</span><b>ESP32-P4</b><small>SMART HMI</small></div>
+      <nav>
+        <button class="nav-btn active" data-page="home">⌂ <span>Home</span></button>
+        <button class="nav-btn" data-page="system">⚙ <span>System</span></button>
+        <button class="nav-btn" data-page="display">▣ <span>Display</span></button>
+        <button class="nav-btn" data-page="connectivity">⌁ <span>Connectivity</span></button>
+        <button class="nav-btn" data-page="environment">♢ <span>Environment</span></button>
+        <button class="nav-btn" data-page="power">ϟ <span>Power</span></button>
+        <button class="nav-btn" data-page="settings">⚙ <span>Settings</span></button>
+        <button class="nav-btn" data-page="about">ⓘ <span>About</span></button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1>ESP32-<em>P4</em> HMI</h1>
+          <p>High-Performance Smart Display</p>
+        </div>
+        <div class="top-status">
+          <div class="connection-pill">◉ Wi-Fi <strong id="wifiState">Connected</strong></div>
+          <div class="connection-pill">♢ Bluetooth <strong>Connected</strong></div>
+          <div class="clock"><b id="clock">--:--:--</b><span id="date">--</span></div>
+          <button class="icon-btn" id="settingsBtn">⚙</button>
+        </div>
+      </header>
+
+      <section id="page-home" class="page active">
+        <section class="feature-row">
+          <article class="feature-card"><span class="feature-icon purple">◉</span><b>High<br>Performance</b></article>
+          <article class="feature-card"><span class="feature-icon purple">▣</span><b>Quad Core<br>400MHz</b></article>
+          <article class="feature-card"><span class="feature-icon cyan">⌁</span><b>Wi-Fi 6<br>Bluetooth 5</b></article>
+          <article class="feature-card"><span class="feature-icon green">▣</span><b>Rich Display<br>Interface</b></article>
+          <article class="feature-card"><span class="feature-icon orange">ϟ</span><b>Secure &<br>Reliable</b></article>
+        </section>
+
+        <section class="grid-main">
+          <article class="panel environment">
+            <div class="panel-title">♨ ENVIRONMENT <span>•••</span></div>
+            <div class="env-grid">
+              <div class="metric">
+                <label>Temperature</label>
+                <strong><span id="temp">26.8</span><small>°C</small></strong>
+                <div class="spark cyan-spark" id="tempSpark"></div>
+                <small>Min 23.1° &nbsp;|&nbsp; Max 32.4°</small>
+              </div>
+              <div class="metric">
+                <label>Humidity</label>
+                <strong><span id="humidity">62</span><small>%</small></strong>
+                <div class="spark green-spark" id="humSpark"></div>
+                <small>Min 45% &nbsp;|&nbsp; Max 78%</small>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel activity">
+            <div class="panel-title">⌁ SYSTEM ACTIVITY <span>•••</span></div>
+            <div class="chart-wrap">
+              <canvas id="activityChart"></canvas>
+              <div class="chart-value"><small>CPU</small><b id="cpuValue">48%</b><i></i><small>RAM</small><b class="ram" id="ramValue">32%</b></div>
+            </div>
+          </article>
+
+          <article class="panel status">
+            <div class="panel-title">⚙ SYSTEM STATUS <span>•••</span></div>
+            <div class="status-list">
+              <div>▣ <b>Core 1</b><span>400MHz</span><i>● Online</i></div>
+              <div>▣ <b>Core 2</b><span>400MHz</span><i>● Online</i></div>
+              <div>▤ <b>PSRAM</b><span>16MB</span><i>● OK</i></div>
+              <div>▤ <b>Flash</b><span>8MB</span><i>● OK</i></div>
+              <div>◷ <b>Uptime</b><span id="uptime">00:00:00</span><i>● Good</i></div>
+            </div>
+          </article>
+
+          <article class="panel power">
+            <div class="panel-title">ϟ POWER MONITOR <span>•••</span></div>
+            <div class="power-content">
+              <div class="power-ring"><b id="power">12.6</b><small>W</small></div>
+              <div class="power-info">
+                <p>Voltage <b id="voltage">3.39V</b></p>
+                <p>Current <b id="current">3.82A</b></p>
+                <p>Efficiency <b>92%</b></p>
+                <p>Status <b class="good">Normal</b></p>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel controls">
+            <div class="panel-title">▦ QUICK CONTROLS <span>•••</span></div>
+            <div class="control-grid">
+              <button class="control on" data-control="Light">💡<b>Light</b><small>ON</small></button>
+              <button class="control on" data-control="Fan">♨<b>Fan</b><small>ON</small></button>
+              <button class="control" data-control="Pump">◉<b>Pump</b><small>OFF</small></button>
+              <button class="control on" data-control="Valve">▣<b>Valve</b><small>ON</small></button>
+              <button class="control" data-control="Alarm">♢<b>Alarm</b><small>OFF</small></button>
+            </div>
+          </article>
+
+          <article class="panel connectivity">
+            <div class="panel-title">⌁ CONNECTIVITY <span>•••</span></div>
+            <div class="connect-list">
+              <p>◉ <b>Wi-Fi 6</b><span>Connected ▮▮▮▮</span></p>
+              <p>♢ <b>Bluetooth 5.0</b><span>Connected ▮▮▮▮</span></p>
+              <p>▣ <b>Ethernet</b><span class="offline">Disconnected ▮</span></p>
+            </div>
+          </article>
+
+          <article class="panel shortcuts">
+            <div class="panel-title">☆ SHORTCUTS <span>•••</span></div>
+            <div class="shortcut-grid">
+              <button>▦<small>Dashboard</small></button>
+              <button>▥<small>Charts</small></button>
+              <button>⚙<small>Settings</small></button>
+              <button>ⓘ<small>About</small></button>
+            </div>
+          </article>
+        </section>
+
+        <section class="gauges">
+          <article class="gauge-card"><div class="panel-title">♨ TEMPERATURE GAUGE <span>•••</span></div><canvas id="tempGauge"></canvas><div class="gauge-text"><b id="gTemp">26.8°C</b><small>Normal</small></div></article>
+          <article class="gauge-card"><div class="panel-title">▣ CPU USAGE <span>•••</span></div><canvas id="cpuGauge"></canvas><div class="gauge-text"><b id="gCpu">48%</b><small>Running</small></div></article>
+          <article class="gauge-card"><div class="panel-title">▣ MEMORY USAGE <span>•••</span></div><canvas id="ramGauge"></canvas><div class="gauge-text"><b id="gRam">32%</b><small>4.3 / 16 MB</small></div></article>
+          <article class="gauge-card"><div class="panel-title">ϟ VOLTAGE MONITOR <span>•••</span></div><canvas id="voltGauge"></canvas><div class="gauge-text"><b id="gVolt">3.39V</b><small>Stable</small></div></article>
+        </section>
+      </section>
+
+      <section id="page-system" class="page-placeholder page"><h2>System</h2><p>System monitoring page siap dihubungkan ke data ESP32.</p></section>
+      <section id="page-display" class="page-placeholder page"><h2>Display</h2><p>Pengaturan brightness, theme dan layout HMI.</p></section>
+      <section id="page-connectivity" class="page-placeholder page"><h2>Connectivity</h2><p>Status Wi-Fi, Bluetooth, MQTT dan WebSocket.</p></section>
+      <section id="page-environment" class="page-placeholder page"><h2>Environment</h2><p>Monitoring sensor suhu dan kelembapan.</p></section>
+      <section id="page-power" class="page-placeholder page"><h2>Power</h2><p>Monitoring voltage, current, watt dan efficiency.</p></section>
+      <section id="page-settings" class="page-placeholder page"><h2>Settings</h2><p>Konfigurasi dashboard.</p></section>
+      <section id="page-about" class="page-placeholder page"><h2>About</h2><p>ESP32-P4 Smart HMI Dashboard.</p></section>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
